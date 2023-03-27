@@ -51,11 +51,7 @@ const Home: React.FC<HomeProps> = ({ serverSideApiKeyIsSet }) => {
   const [settingModel, setSettingModel] = useState<boolean>(true);
   const [local, setLocal] = useState<string>('')
   const stopConversationRef = useRef<boolean>(false);
-  useEffect(() => {
-    const defaultLanguage =  navigator.languages[0] || 'en';
-    console.log(local, defaultLanguage)
-    i18n.changeLanguage(local || defaultLanguage);
-  }, [local])
+  
   const handleSend = async (message: Message, deleteCount = 0) => {
     if (selectedConversation) {
       let updatedConversation: Conversation;
