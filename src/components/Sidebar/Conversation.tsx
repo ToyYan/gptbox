@@ -1,6 +1,12 @@
-import { Conversation, KeyValuePair } from "@/types";
-import { IconCheck, IconMessage, IconPencil, IconTrash, IconX } from "@tabler/icons-react";
-import { DragEvent, FC, KeyboardEvent, useEffect, useState } from "react";
+import { Conversation, KeyValuePair } from '@/types';
+import {
+  IconCheck,
+  IconMessage,
+  IconPencil,
+  IconTrash,
+  IconX,
+} from '@tabler/icons-react';
+import { DragEvent, FC, KeyboardEvent, useEffect, useState } from 'react';
 
 interface Props {
   selectedConversation: Conversation;
@@ -8,30 +14,43 @@ interface Props {
   loading: boolean;
   onSelectConversation: (conversation: Conversation) => void;
   onDeleteConversation: (conversation: Conversation) => void;
-  onUpdateConversation: (conversation: Conversation, data: KeyValuePair) => void;
+  onUpdateConversation: (
+    conversation: Conversation,
+    data: KeyValuePair,
+  ) => void;
 }
 
-export const ConversationComponent: FC<Props> = ({ selectedConversation, conversation, loading, onSelectConversation, onDeleteConversation, onUpdateConversation }) => {
+export const ConversationComponent: FC<Props> = ({
+  selectedConversation,
+  conversation,
+  loading,
+  onSelectConversation,
+  onDeleteConversation,
+  onUpdateConversation,
+}) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
-  const [renameValue, setRenameValue] = useState("");
+  const [renameValue, setRenameValue] = useState('');
 
   const handleEnterDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault();
       handleRename(selectedConversation);
     }
   };
 
-  const handleDragStart = (e: DragEvent<HTMLButtonElement>, conversation: Conversation) => {
+  const handleDragStart = (
+    e: DragEvent<HTMLButtonElement>,
+    conversation: Conversation,
+  ) => {
     if (e.dataTransfer) {
-      e.dataTransfer.setData("conversation", JSON.stringify(conversation));
+      e.dataTransfer.setData('conversation', JSON.stringify(conversation));
     }
   };
 
   const handleRename = (conversation: Conversation) => {
-    onUpdateConversation(conversation, { key: "name", value: renameValue });
-    setRenameValue("");
+    onUpdateConversation(conversation, { key: 'name', value: renameValue });
+    setRenameValue('');
     setIsRenaming(false);
   };
 
@@ -44,81 +63,98 @@ export const ConversationComponent: FC<Props> = ({ selectedConversation, convers
   }, [isRenaming, isDeleting]);
 
   return (
-    <button
-      className={`flex w-full gap-3 items-center p-3 text-sm rounded-lg hover:bg-[#343541]/90 transition-colors duration-200 cursor-pointer ${loading ? "disabled:cursor-not-allowed" : ""} ${selectedConversation.id === conversation.id ? "bg-[#343541]/90" : ""}`}
-      onClick={() => onSelectConversation(conversation)}
-      disabled={loading}
-      draggable="true"
-      onDragStart={(e) => handleDragStart(e, conversation)}
-    >
-      <IconMessage size={16} />
-
+    <div className="relative flex items-center">
       {isRenaming && selectedConversation.id === conversation.id ? (
-        <input
-          className="flex-1 bg-transparent border-b border-neutral-400 focus:border-neutral-100 text-left overflow-hidden overflow-ellipsis pr-1 outline-none text-white"
-          type="text"
-          value={renameValue}
-          onChange={(e) => setRenameValue(e.target.value)}
-          onKeyDown={handleEnterDown}
-          autoFocus
-        />
+        <div className="flex w-full items-center gap-3 bg-[#343541]/90 p-3">
+          <IconMessage size={18} />
+          <input
+            className="mr-12 flex-1 overflow-hidden text-[12.5px] leading-3 overflow-ellipsis border-neutral-400 bg-transparent text-left text-white outline-none focus:border-neutral-100"
+            type="text"
+            value={renameValue}
+            onChange={(e) => setRenameValue(e.target.value)}
+            onKeyDown={handleEnterDown}
+            autoFocus
+          />
+        </div>
       ) : (
-        <div className="overflow-hidden whitespace-nowrap overflow-ellipsis pr-1 flex-1 text-left">{conversation.name}</div>
+        <button
+          className={`flex w-full cursor-pointer items-center gap-3 rounded-lg p-3 text-sm transition-colors duration-200 hover:bg-[#343541]/90 ${
+            loading ? 'disabled:cursor-not-allowed' : ''
+          } ${
+            selectedConversation.id === conversation.id ? 'bg-[#343541]/90' : ''
+          }`}
+          onClick={() => onSelectConversation(conversation)}
+          disabled={loading}
+          draggable="true"
+          onDragStart={(e) => handleDragStart(e, conversation)}
+        >
+          <IconMessage size={18} />
+          <div
+            className={`relative max-h-5 flex-1 text-[12.5px] leading-3 overflow-hidden text-ellipsis whitespace-nowrap break-all text-left ${
+              selectedConversation.id === conversation.id ? 'pr-12' : 'pr-1'
+            }`}
+          >
+            {conversation.name}
+          </div>
+        </button>
       )}
 
-      {(isDeleting || isRenaming) && selectedConversation.id === conversation.id && (
-        <div className="flex gap-1 -ml-2">
-          <IconCheck
-            className="min-w-[20px] text-neutral-400 hover:text-neutral-100"
-            size={16}
-            onClick={(e) => {
-              e.stopPropagation();
+      {(isDeleting || isRenaming) &&
+        selectedConversation.id === conversation.id && (
+          <div className="visible absolute right-1 z-10 flex text-gray-300">
+            <button
+              className="min-w-[20px] p-1 text-neutral-400 hover:text-neutral-100"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (isDeleting) {
+                  onDeleteConversation(conversation);
+                } else if (isRenaming) {
+                  handleRename(conversation);
+                }
+                setIsDeleting(false);
+                setIsRenaming(false);
+              }}
+            >
+              <IconCheck size={18} />
+            </button>
+            <button
+              className="min-w-[20px] p-1 text-neutral-400 hover:text-neutral-100"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsDeleting(false);
+                setIsRenaming(false);
+              }}
+            >
+              <IconX size={18} />
+            </button>
+          </div>
+        )}
 
-              if (isDeleting) {
-                onDeleteConversation(conversation);
-              } else if (isRenaming) {
-                handleRename(conversation);
-              }
-
-              setIsDeleting(false);
-              setIsRenaming(false);
-            }}
-          />
-
-          <IconX
-            className="min-w-[20px] text-neutral-400 hover:text-neutral-100"
-            size={16}
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsDeleting(false);
-              setIsRenaming(false);
-            }}
-          />
-        </div>
-      )}
-
-      {selectedConversation.id === conversation.id && !isDeleting && !isRenaming && (
-        <div className="flex gap-1 -ml-2">
-          <IconPencil
-            className="min-w-[20px] text-neutral-400 hover:text-neutral-100"
-            size={18}
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsRenaming(true);
-              setRenameValue(selectedConversation.name);
-            }}
-          />
-
-          <IconTrash
-            className=" min-w-[20px] text-neutral-400 hover:text-neutral-100"
-            size={18}
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsDeleting(true);
-            }}
-          />
-        </div>
-      )}
-    </button>
+      {selectedConversation.id === conversation.id &&
+        !isDeleting &&
+        !isRenaming && (
+          <div className="visible absolute right-1 z-10 flex text-gray-300">
+            <button
+              className="min-w-[20px] p-1 text-neutral-400 hover:text-neutral-100"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsRenaming(true);
+                setRenameValue(selectedConversation.name);
+              }}
+            >
+              <IconPencil size={18} />
+            </button>
+            <button
+              className="min-w-[20px] p-1 text-neutral-400 hover:text-neutral-100"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsDeleting(true);
+              }}
+            >
+              <IconTrash size={18} />
+            </button>
+          </div>
+        )}
+    </div>
   );
 };

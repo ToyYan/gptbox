@@ -5,5 +5,5 @@ const element = document.getElementById('root');
 const root = createRoot(element as HTMLElement);
 import '../i18n';
 
-root.render(<Main></Main>);
+root.render(<Main serverSideApiKeyIsSet={false}></Main>);
 electronAPI.ready();

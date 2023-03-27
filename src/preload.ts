@@ -6,3 +6,5 @@ const { contextBridge, ipcRenderer } = require('electron')
 contextBridge.exposeInMainWorld('electronAPI', {
     ready: () => ipcRenderer.send('ready')
 })
+
+contextBridge.exposeInMainWorld('DEFAULT_BIRDGE_URL', 'https://chatgpt.gptbox.tech');

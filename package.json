@@ -47,6 +47,7 @@
     "@dqbd/tiktoken": "^1.0.2",
     "@tabler/icons-react": "^2.11.0",
     "@tailwindcss/typography": "^0.5.9",
+    "ai-chatbot-starter": "github:ToyYan/chatbot-ui",
     "autoprefixer": "^10.4.14",
     "electron-squirrel-startup": "^1.0.0",
     "eventsource-parser": "^1.0.0",

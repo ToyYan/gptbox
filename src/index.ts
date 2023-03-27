@@ -18,9 +18,9 @@ const createWindow = (): void => {
     width: 1000,
     minWidth: 640,
     titleBarStyle: "hiddenInset",
-    show: false,
+    // show: false,
     webPreferences: {
-      devTools: false,
+      // devTools: false,
       webgl: false,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
@@ -35,7 +35,7 @@ const createWindow = (): void => {
   // })
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 ipcMain.on("ready", (event) => {

@@ -1,6 +1,7 @@
-import { IconCheck, IconKey, IconX } from "@tabler/icons-react";
-import { FC, KeyboardEvent, useState } from "react";
-import { SidebarButton } from "./SidebarButton";
+import { IconCheck, IconKey, IconX } from '@tabler/icons-react';
+import { FC, KeyboardEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { SidebarButton } from './SidebarButton';
 
 interface Props {
   apiKey: string;
@@ -8,11 +9,12 @@ interface Props {
 }
 
 export const Key: FC<Props> = ({ apiKey, onApiKeyChange }) => {
+  const { t } = useTranslation('sidebar');
   const [isChanging, setIsChanging] = useState(false);
   const [newKey, setNewKey] = useState(apiKey);
 
   const handleEnterDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault();
       handleUpdateKey(newKey);
     }
@@ -24,15 +26,16 @@ export const Key: FC<Props> = ({ apiKey, onApiKeyChange }) => {
   };
 
   return isChanging ? (
-    <div className="flex transition-colors duration:200 hover:bg-gray-500/10 py-3 px-3 rounded-md cursor-pointer w-full items-center">
-      <IconKey size={16} />
+    <div className="duration:200 flex w-full cursor-pointer items-center rounded-md py-3 px-3 transition-colors hover:bg-gray-500/10">
+      <IconKey size={18} />
 
       <input
-        className="ml-2 flex-1 h-[20px] bg-transparent border-b border-neutral-400 focus:border-neutral-100 text-left overflow-hidden overflow-ellipsis pr-1 outline-none text-white"
+        className="ml-2 h-[20px] flex-1 overflow-hidden overflow-ellipsis border-b border-neutral-400 bg-transparent pr-1 text-left text-white outline-none focus:border-neutral-100"
         type="password"
         value={newKey}
         onChange={(e) => setNewKey(e.target.value)}
         onKeyDown={handleEnterDown}
+        placeholder={t('API Key') || 'API Key'}
       />
 
       <div className="flex w-[40px]">
@@ -51,16 +54,15 @@ export const Key: FC<Props> = ({ apiKey, onApiKeyChange }) => {
           onClick={(e) => {
             e.stopPropagation();
             setIsChanging(false);
-            handleUpdateKey("");
-            setNewKey("");
+            setNewKey(apiKey);
           }}
         />
       </div>
     </div>
   ) : (
     <SidebarButton
-      text="OpenAI API Key"
-      icon={<IconKey size={16} />}
+      text={t('OpenAI API Key')}
+      icon={<IconKey size={18} />}
       onClick={() => setIsChanging(true)}
     />
   );
