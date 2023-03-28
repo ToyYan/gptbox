@@ -37,8 +37,7 @@ const Home: React.FC<HomeProps> = ({ serverSideApiKeyIsSet }) => {
   const { t, i18n } = useTranslation('chat');
   const [folders, setFolders] = useState<ChatFolder[]>([]);
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [selectedConversation, setSelectedConversation] =
-    useState<Conversation>();
+  const [selectedConversation, setSelectedConversation] = useState<Conversation>();
   const [loading, setLoading] = useState<boolean>(false);
   const [models, setModels] = useState<OpenAIModel[]>([]);
   const [lightMode, setLightMode] = useState<'dark' | 'light'>('dark');
@@ -258,6 +257,11 @@ const Home: React.FC<HomeProps> = ({ serverSideApiKeyIsSet }) => {
     localStorage.setItem('apiKey', apiKey);
   };
 
+  const handleLocalChange = (local: string) => {
+    setLocal(local);
+    localStorage.setItem('local', local);
+  }
+
   const handleExportData = () => {
     exportData();
   };
@@ -462,6 +466,14 @@ const Home: React.FC<HomeProps> = ({ serverSideApiKeyIsSet }) => {
     }
   }, [apiKey]);
 
+  const getDefaultLanguage = () => {
+    const languages = navigator.languages.map((l) => l.split('-')[0]);
+    return languages.length > 0 ? languages[0] : 'en';
+  }
+  useEffect(() => {
+    i18n.changeLanguage(local || getDefaultLanguage() || 'en');
+  }, [local])
+
   useEffect(() => {
     const theme = localStorage.getItem('theme');
     if (theme) {
@@ -474,6 +486,13 @@ const Home: React.FC<HomeProps> = ({ serverSideApiKeyIsSet }) => {
       fetchModels(apiKey);
     } else if (serverSideApiKeyIsSet) {
       fetchModels('');
+    }
+
+    const local = localStorage.getItem('local');
+    if (local) {
+      setLocal(local);
+    } else {
+      setLocal('');
     }
 
     if (window.innerWidth < 640) {
@@ -571,9 +590,11 @@ const Home: React.FC<HomeProps> = ({ serverSideApiKeyIsSet }) => {
               />
             )}
             {settingModel ? <Settings
-            onCloseSystemSetting={handleSystemSetting}
-            onChangeLanguage = {(value) => { setLocal(value) }}
-            language={local}
+              onCloseSystemSetting={handleSystemSetting}
+              onChangeLanguage = {handleLocalChange}
+              language={local}
+              apiKey={apiKey}
+              onApiKeyChange={handleApiKeyChange}
             ></Settings> : <Chat
               conversation={selectedConversation}
               messageIsStreaming={messageIsStreaming}
