@@ -20,7 +20,6 @@ const config: ForgeConfig = {
     new MakerZIP({}, ['darwin']),
     new MakerRpm({}),
     new MakerDeb({}),
-    new MakerWix({}),
     new MakerDMG({})
   ],
   plugins: [

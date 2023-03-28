@@ -47,7 +47,7 @@ const Home: React.FC<HomeProps> = ({ serverSideApiKeyIsSet }) => {
   const [messageError, setMessageError] = useState<boolean>(false);
   const [modelError, setModelError] = useState<ErrorMessage | null>(null);
   const [currentMessage, setCurrentMessage] = useState<Message>();
-  const [settingModel, setSettingModel] = useState<boolean>(true);
+  const [settingModel, setSettingModel] = useState<boolean>(false);
   const [local, setLocal] = useState<string>('')
   const stopConversationRef = useRef<boolean>(false);
   
