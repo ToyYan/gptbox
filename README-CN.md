@@ -5,10 +5,11 @@ gptbox 是一个高级聊天机器人客户端，帮助您更便捷的方位chat
 它旨在提供类似于 ChatGPT 的用户体验。
 
 所有对话都本地存储在您的设备上。
+[中文](https://github.com/ToyYan/gptbox/blob/0.0.1/README-CN.md)
 
 # 下载地址
 
-[下载地址](https://gbtbox.tech)
+[下载地址](https://github.com/ToyYan/gptbox/releases)
 
 # 特点
 1. 无需安装，下载就可以使用
