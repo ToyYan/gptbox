@@ -18,8 +18,6 @@ jobs:
         run: npm install
       - name: Build
         run: npm run make
-      - name: Publish
-        run: npm run publish
       - name: Archive Build Artifacts
         uses: LabhanshAgrawal/upload-artifact@v3
         with:
