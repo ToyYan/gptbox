@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "@dqbd/tiktoken": "^1.0.2",
+    "@electron-forge/publisher-github": "^6.0.5",
     "@tabler/icons-react": "^2.11.0",
     "@tailwindcss/typography": "^0.5.9",
     "ai-chatbot-starter": "github:ToyYan/chatbot-ui",
